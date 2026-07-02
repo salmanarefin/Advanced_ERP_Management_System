@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="container mt-4">
+    <div class="mb-4">
+        <h2>Reports Dashboard</h2>
+        <p class="text-muted">
+            View and print ERP reports for employees, attendance, leave, and payroll.
+        </p>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-primary h-100">
+                <div class="card-body">
+                    <h5>Employee Report</h5>
+                    <p class="text-muted">View all employees with department and designation.</p>
+                    <a asp-action="EmployeeReport" class="btn btn-primary">
+                        Open Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-success h-100">
+                <div class="card-body">
+                    <h5>Attendance Report</h5>
+                    <p class="text-muted">View attendance records by date range.</p>
+                    <a asp-action="AttendanceReport" class="btn btn-success">
+                        Open Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-warning h-100">
+                <div class="card-body">
+                    <h5>Leave Report</h5>
+                    <p class="text-muted">View leave applications by status.</p>
+                    <a asp-action="LeaveReport" class="btn btn-warning">
+                        Open Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-dark h-100">
+                <div class="card-body">
+                    <h5>Payroll Report</h5>
+                    <p class="text-muted">View monthly payroll cost and salary records.</p>
+                    <a asp-action="PayrollReport" class="btn btn-dark">
+                        Open Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

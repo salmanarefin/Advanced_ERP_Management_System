@@ -1,0 +1,80 @@
+﻿@model ERP_version1.Models.HR.Department
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Department Details</h2>
+            <p class="text-muted mb-0">
+                View complete information about this department.
+            </p>
+        </div>
+
+        <div>
+            <a asp-action="Edit"
+               asp-route-id="@Model.DepartmentId"
+               class="btn btn-primary">
+                Edit Department
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>@Model.DepartmentName</strong>
+
+            @if (Model.IsActive)
+            {
+                <span class="badge bg-success">Active</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Inactive</span>
+            }
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Department Name</p>
+                    <h5>@Model.DepartmentName</h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Created At</p>
+                    <h5>@Model.CreatedAt.ToString("dd MMM yyyy hh:mm tt")</h5>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <p class="text-muted mb-1">Description</p>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <p class="mb-0">@Model.Description</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No description added.</p>
+                    }
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Back to List
+                </a>
+
+                <a asp-action="Delete"
+                   asp-route-id="@Model.DepartmentId"
+                   class="btn btn-outline-danger">
+                    Delete Department
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

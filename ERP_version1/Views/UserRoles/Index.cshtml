@@ -1,0 +1,72 @@
+﻿@model IEnumerable<ERP_version1.ViewModels.UserRolesViewModel>
+
+@{
+    ViewData["Title"] = "User Role Management";
+}
+
+<div class="container mt-4">
+    <h2>User Role Management</h2>
+    <p class="text-muted">Admin can view users and manage their assigned roles.</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Email</th>
+                <th>Current Roles</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.Roles != null && user.Roles.Any())
+                            {
+                                foreach (var role in user.Roles)
+                                {
+                                    <span class="badge bg-primary me-1">@role</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">No role assigned</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Manage" asp-route-userId="@user.UserId" class="btn btn-sm btn-warning">
+                                Manage Roles
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center text-muted">
+                        No users found.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

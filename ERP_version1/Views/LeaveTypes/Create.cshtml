@@ -1,0 +1,74 @@
+﻿@model ERP_version1.Models.LeaveModule.LeaveType
+
+@{
+    ViewData["Title"] = "Create Leave Type";
+}
+
+<div class="container-fluid mt-4">
+    <div class="mb-4">
+        <h2 class="mb-1">Create Leave Type</h2>
+        <p class="text-muted mb-0">
+            Add a new leave category with default yearly leave days.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white">
+            <strong>Leave Type Information</strong>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="LeaveTypeName" class="form-label">Leave Type Name</label>
+                        <input asp-for="LeaveTypeName"
+                               class="form-control"
+                               placeholder="Example: Annual Leave" />
+                        <span asp-validation-for="LeaveTypeName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DefaultDays" class="form-label">Default Days</label>
+                        <input asp-for="DefaultDays"
+                               type="number"
+                               min="0"
+                               class="form-control"
+                               placeholder="Example: 15" />
+                        <span asp-validation-for="DefaultDays" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="IsActive" class="form-label">Status</label>
+                        <select asp-for="IsActive" class="form-select">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                        <span asp-validation-for="IsActive" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Tip:</strong>
+                    Default days will be used as the standard allowed days for this leave type.
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Back to List
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Leave Type
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

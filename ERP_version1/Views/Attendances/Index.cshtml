@@ -1,0 +1,118 @@
+﻿@model IEnumerable<ERP_version1.Models.AttendanceModule.Attendance>
+
+@{
+    ViewData["Title"] = "Attendance List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Attendance List</h2>
+        <a asp-action="Create" class="btn btn-primary">Employee Check In</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Working Hours</th>
+                <th>Status</th>
+                <th>Late Minutes</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Employee?.FullName</td>
+                        <td>@item.AttendanceDate.ToString("dd MMM yyyy")</td>
+                        <td>
+                            @if (item.CheckInTime != null)
+                            {
+                                @item.CheckInTime.Value.ToString("hh:mm tt")
+                            }
+                            else
+                            {
+                                <span class="text-muted">Not checked in</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.CheckOutTime != null)
+                            {
+                                @item.CheckOutTime.Value.ToString("hh:mm tt")
+                            }
+                            else
+                            {
+                                <span class="text-muted">Not checked out</span>
+                            }
+                        </td>
+                        <td>@item.WorkingHours</td>
+                        <td>
+                            @if (item.Status == "Late")
+                            {
+                                <span class="badge bg-warning text-dark">Late</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Present</span>
+                            }
+                        </td>
+                        <td>@item.LateMinutes</td>
+                        <td>
+                            @if (item.CheckOutTime == null)
+                            {
+                                <form asp-action="CheckOut" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="attendanceId" value="@item.AttendanceId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        Check Out
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Completed</span>
+                            }
+
+                            <a asp-action="Details" asp-route-id="@item.AttendanceId" class="btn btn-sm btn-info ms-1">
+                                Details
+                            </a>
+
+                            <a asp-action="Delete" asp-route-id="@item.AttendanceId" class="btn btn-sm btn-outline-danger ms-1">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted">
+                        No attendance records found.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

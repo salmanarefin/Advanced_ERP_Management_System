@@ -1,0 +1,82 @@
+﻿@model ERP_version1.Models.PayrollModule.Payroll
+
+@{
+    ViewData["Title"] = "Generate Payroll";
+}
+
+<div class="container mt-4">
+    <h2>Generate Payroll</h2>
+
+    <div class="card mt-3">
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EmployeeId" class="form-label">Employee</label>
+                    <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId">
+                        <option value="">-- Select Employee --</option>
+                    </select>
+                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Month" class="form-label">Month</label>
+                    <select asp-for="Month" class="form-control">
+                        <option value="">-- Select Month --</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <span asp-validation-for="Month" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Year" class="form-label">Year</label>
+                    <input asp-for="Year" class="form-control" placeholder="Example: 2026" />
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Bonus" class="form-label">Bonus</label>
+                    <input asp-for="Bonus" class="form-control" value="0" />
+                    <span asp-validation-for="Bonus" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Deduction" class="form-label">Deduction</label>
+                    <input asp-for="Deduction" class="form-control" value="0" />
+                    <span asp-validation-for="Deduction" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Tax" class="form-label">Tax</label>
+                    <input asp-for="Tax" class="form-control" value="0" />
+                    <span asp-validation-for="Tax" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">Generate Payroll</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

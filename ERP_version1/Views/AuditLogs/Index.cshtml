@@ -1,0 +1,175 @@
+﻿@model ERP_version1.ViewModels.AuditLogIndexViewModel
+
+@{
+    ViewData["Title"] = "Audit Logs";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>Audit Logs</h2>
+            <p class="text-muted mb-0">
+                Track important system activities and user actions.
+            </p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-2 align-items-end">
+                <div class="col-md-10">
+                    <label class="form-label">Search</label>
+                    <input type="text"
+                           name="searchTerm"
+                           value="@Model.SearchTerm"
+                           class="form-control"
+                           placeholder="Search by user, action, module, table, description, or IP address..." />
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        Search
+                    </button>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+                {
+                    <div class="col-md-12">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                            Clear Search
+                        </a>
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>System Activity History</strong>
+            <span class="text-muted small">
+                Total: @Model.TotalAuditLogs logs
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model.AuditLogs.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0 align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Module</th>
+                                <th>Table</th>
+                                <th>Record ID</th>
+                                <th>Description</th>
+                                <th>IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.AuditLogs)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.CreatedAt.ToString("dd MMM yyyy hh:mm tt")
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(item.UserEmail))
+                                        {
+                                            @item.UserEmail
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Unknown</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">
+                                            @item.Action
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @item.ModuleName
+                                    </td>
+                                    <td>
+                                        @item.TableName
+                                    </td>
+                                    <td>
+                                        @if (item.RecordId != null)
+                                        {
+                                            @item.RecordId
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td style="min-width: 250px;">
+                                        @item.Description
+                                    </td>
+                                    <td>
+                                        @item.IpAddress
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    No audit logs found.
+                </div>
+            }
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <div class="card-footer bg-white">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="text-muted small">
+                        Page @Model.CurrentPage of @Model.TotalPages
+                    </div>
+
+                    <nav>
+                        <ul class="pagination mb-0">
+                            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-searchTerm="@Model.SearchTerm"
+                                   asp-route-page="@(Model.CurrentPage - 1)">
+                                    Previous
+                                </a>
+                            </li>
+
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link"
+                                       asp-action="Index"
+                                       asp-route-searchTerm="@Model.SearchTerm"
+                                       asp-route-page="@i">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-searchTerm="@Model.SearchTerm"
+                                   asp-route-page="@(Model.CurrentPage + 1)">
+                                    Next
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        }
+    </div>
+</div>

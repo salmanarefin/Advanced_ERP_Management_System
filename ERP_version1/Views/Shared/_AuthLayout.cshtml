@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - ERP HRMS</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 1050px;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+        }
+
+        .auth-left {
+            background: linear-gradient(160deg, #1d4ed8, #0f172a);
+            color: white;
+            padding: 50px;
+            min-height: 620px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        .auth-left h1 {
+            font-size: 38px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .auth-left p {
+            font-size: 16px;
+            color: #dbeafe;
+            line-height: 1.7;
+        }
+
+        .auth-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+            color: #e0f2fe;
+        }
+
+        .auth-feature span {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-right {
+            padding: 50px;
+            min-height: 620px;
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-form-box {
+            width: 100%;
+        }
+
+        .auth-form-box h2 {
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .auth-form-box .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .form-control {
+            min-height: 48px;
+            border-radius: 12px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .btn-auth {
+            min-height: 48px;
+            border-radius: 12px;
+            font-weight: 700;
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        .btn-auth:hover {
+            background: #1e40af;
+            border-color: #1e40af;
+        }
+
+        .auth-link {
+            color: #1d4ed8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        .validation-summary-errors ul {
+            padding-left: 18px;
+            margin-bottom: 0;
+        }
+
+        @@media (max-width: 991px) {
+            .auth-left {
+                min-height: auto;
+                padding: 35px;
+            }
+
+            .auth-right {
+                min-height: auto;
+                padding: 35px;
+            }
+
+            .auth-left h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="auth-wrapper">
+        <div class="auth-card">
+            <div class="row g-0">
+                <div class="col-lg-5">
+                    <div class="auth-left">
+                        <div class="auth-logo">
+                            ERP
+                        </div>
+
+                        <h1>ERP HRMS Management System</h1>
+
+                        <p>
+                            Manage employees, attendance, leave, payroll, reports, roles, and system audit logs from one secure dashboard.
+                        </p>
+
+                        <div class="auth-feature">
+                            <span>✓</span>
+                            <div>Role-based access control</div>
+                        </div>
+
+                        <div class="auth-feature">
+                            <span>✓</span>
+                            <div>Attendance and leave management</div>
+                        </div>
+
+                        <div class="auth-feature">
+                            <span>✓</span>
+                            <div>Payroll and professional reports</div>
+                        </div>
+
+                        <div class="auth-feature">
+                            <span>✓</span>
+                            <div>Audit log tracking for admin</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="auth-right">
+                        <div class="auth-form-box">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

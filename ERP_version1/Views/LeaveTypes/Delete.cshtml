@@ -1,0 +1,81 @@
+﻿@model ERP_version1.Models.LeaveModule.LeaveType
+
+@{
+    ViewData["Title"] = "Delete Leave Type";
+}
+
+<div class="container-fluid mt-4">
+    <div class="mb-4">
+        <h2 class="mb-1 text-danger">Delete Leave Type</h2>
+        <p class="text-muted mb-0">
+            Confirm before deleting this leave type.
+        </p>
+    </div>
+
+    <div class="alert alert-warning">
+        <strong>Warning:</strong>
+        If this leave type is connected with leave applications, deleting it may not be allowed.
+        In that case, make it inactive instead.
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>@Model.LeaveTypeName</strong>
+
+            @if (Model.IsActive)
+            {
+                <span class="badge bg-success">Active</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Inactive</span>
+            }
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Leave Type Name</p>
+                    <h5>@Model.LeaveTypeName</h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Default Days</p>
+                    <h5>@Model.DefaultDays days</h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Created At</p>
+                    <h5>@Model.CreatedAt.ToString("dd MMM yyyy hh:mm tt")</h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Current Status</p>
+
+                    @if (Model.IsActive)
+                    {
+                        <h5><span class="badge bg-success">Active</span></h5>
+                    }
+                    else
+                    {
+                        <h5><span class="badge bg-secondary">Inactive</span></h5>
+                    }
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="LeaveTypeId" />
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-danger">
+                        Confirm Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

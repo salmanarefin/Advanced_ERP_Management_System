@@ -1,0 +1,30 @@
+﻿@model ERP_version1.Models.LeaveModule.LeaveApplication
+
+@{
+    ViewData["Title"] = "Delete Leave Application";
+}
+
+<div class="container mt-4">
+    <h2>Delete Leave Application</h2>
+
+    <div class="alert alert-warning mt-3">
+        Are you sure you want to delete this leave application?
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Employee:</strong> @Model.Employee?.FullName</p>
+            <p><strong>Leave Type:</strong> @Model.LeaveType?.LeaveTypeName</p>
+            <p><strong>Date:</strong> @Model.StartDate.ToString("dd MMM yyyy") - @Model.EndDate.ToString("dd MMM yyyy")</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="LeaveApplicationId" />
+
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

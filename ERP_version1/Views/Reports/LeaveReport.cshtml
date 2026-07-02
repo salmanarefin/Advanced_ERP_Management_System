@@ -1,0 +1,277 @@
+﻿@model IEnumerable<ERP_version1.Models.LeaveModule.LeaveApplication>
+
+@{
+    ViewData["Title"] = "Leave Report";
+}
+
+<div class="container-fluid mt-4 leave-report-page">
+    <div class="d-flex justify-content-between align-items-center mb-3 no-print">
+        <div>
+            <h2>Leave Report</h2>
+            <p class="text-muted mb-0">
+                Review leave applications by date range, employee, leave type, status, or search keyword.
+            </p>
+        </div>
+
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary me-2">
+                Back to Reports
+            </a>
+
+            <button type="button" onclick="window.print()" class="btn btn-primary">
+                Print Report
+            </button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3 no-print">
+        <div class="card-body">
+            <form asp-action="LeaveReport" method="get" class="row g-3 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label">From Date</label>
+                    <input type="date"
+                           name="fromDate"
+                           value="@ViewBag.FromDate"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">To Date</label>
+                    <input type="date"
+                           name="toDate"
+                           value="@ViewBag.ToDate"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Employee</label>
+                    <select name="employeeId" class="form-select" asp-items="ViewBag.Employees">
+                        <option value="">All Employees</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Leave Type</label>
+                    <select name="leaveTypeId" class="form-select" asp-items="ViewBag.LeaveTypes">
+                        <option value="">All Leave Types</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" asp-items="ViewBag.StatusList">
+                        <option value="">All Status</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Search</label>
+                    <input type="text"
+                           name="searchTerm"
+                           value="@ViewBag.SearchTerm"
+                           class="form-control"
+                           placeholder="Name, code, email, reason..." />
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">
+                        Apply Filter
+                    </button>
+                </div>
+
+                <div class="col-md-12">
+                    <a asp-action="LeaveReport" class="btn btn-outline-secondary btn-sm">
+                        Clear Filter
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="print-header d-none d-print-block text-center mb-4">
+        <h2>ERP HRMS</h2>
+        <h4>Leave Report</h4>
+        <p>
+            Period: @ViewBag.FromDate to @ViewBag.ToDate
+        </p>
+        <p>
+            Generated on @DateTime.Now.ToString("dd MMM yyyy hh:mm tt")
+        </p>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total Applications</p>
+                    <h3 class="mb-0">@ViewBag.TotalApplications</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Pending</p>
+                    <h3 class="mb-0">@ViewBag.PendingCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Approved</p>
+                    <h3 class="mb-0">@ViewBag.ApprovedCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Rejected</p>
+                    <h3 class="mb-0">@ViewBag.RejectedCount</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between flex-wrap">
+                <div>
+                    <strong>Report Period:</strong>
+                    <span>@ViewBag.FromDate to @ViewBag.ToDate</span>
+                </div>
+
+                <div>
+                    <strong>Total Leave Days:</strong>
+                    <span>@ViewBag.TotalLeaveDays days</span>
+                </div>
+
+                <div>
+                    <strong>Total Result:</strong>
+                    <span>@Model.Count()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>Leave Application List</strong>
+            <span class="text-muted small">
+                Total Result: @Model.Count()
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover mb-0 align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Employee Code</th>
+                                <th>Employee Name</th>
+                                <th>Email</th>
+                                <th>Leave Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Total Days</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Applied At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Employee?.EmployeeCode</td>
+                                    <td>@item.Employee?.FullName</td>
+                                    <td>@item.Employee?.Email</td>
+                                    <td>@item.LeaveType?.LeaveTypeName</td>
+                                    <td>@item.StartDate.ToString("dd MMM yyyy")</td>
+                                    <td>@item.EndDate.ToString("dd MMM yyyy")</td>
+                                    <td>@item.TotalDays</td>
+                                    <td style="min-width: 220px;">
+                                        @item.Reason
+
+                                        @if (!string.IsNullOrWhiteSpace(item.RejectionReason))
+                                        {
+                                            <div class="text-danger small mt-1">
+                                                Rejection: @item.RejectionReason
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">Approved</span>
+                                        }
+                                        else if (item.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        }
+                                    </td>
+                                    <td>@item.AppliedAt.ToString("dd MMM yyyy hh:mm tt")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    No leave applications found for this filter.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        body {
+            background: white !important;
+        }
+
+        .no-print,
+        .sidebar,
+        .navbar,
+        .btn {
+            display: none !important;
+        }
+
+        .container-fluid {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .card {
+            border: 1px solid #ddd !important;
+            box-shadow: none !important;
+        }
+
+        .table {
+            font-size: 10px;
+        }
+
+            .table th,
+            .table td {
+                padding: 4px !important;
+            }
+
+        .print-header {
+            display: block !important;
+        }
+    }
+</style>

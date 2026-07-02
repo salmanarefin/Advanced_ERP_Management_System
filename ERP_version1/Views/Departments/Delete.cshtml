@@ -1,0 +1,75 @@
+﻿@model ERP_version1.Models.HR.Department
+
+@{
+    ViewData["Title"] = "Delete Department";
+}
+
+<div class="container-fluid mt-4">
+    <div class="mb-4">
+        <h2 class="mb-1 text-danger">Delete Department</h2>
+        <p class="text-muted mb-0">
+            Confirm before deleting or deactivating this department.
+        </p>
+    </div>
+
+    <div class="alert alert-warning">
+        <strong>Warning:</strong>
+        If this department is connected with employees or designations, it will be deactivated instead of permanently deleted.
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>@Model.DepartmentName</strong>
+
+            @if (Model.IsActive)
+            {
+                <span class="badge bg-success">Active</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Inactive</span>
+            }
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Department Name</p>
+                    <h5>@Model.DepartmentName</h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <p class="text-muted mb-1">Created At</p>
+                    <h5>@Model.CreatedAt.ToString("dd MMM yyyy hh:mm tt")</h5>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <p class="text-muted mb-1">Description</p>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <p class="mb-0">@Model.Description</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No description added.</p>
+                    }
+                </div>
+            </div>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="DepartmentId" />
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-danger">
+                        Confirm Delete / Deactivate
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

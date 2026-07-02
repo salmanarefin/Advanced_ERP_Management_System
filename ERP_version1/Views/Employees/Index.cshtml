@@ -1,0 +1,193 @@
+﻿@model ERP_version1.ViewModels.EmployeeIndexViewModel
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<div class="container mt-4">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2>Employees</h2>
+            <p class="text-muted">
+                Manage employee information with search and pagination.
+            </p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Create New
+        </a>
+    </div>
+
+    <form method="get" asp-action="Index" class="card card-body mb-3">
+        <div class="row">
+            <div class="col-md-9">
+                <label class="form-label">Search Employee</label>
+                <input type="text"
+                       name="searchTerm"
+                       value="@Model.SearchTerm"
+                       class="form-control"
+                       placeholder="Search by name, email, code, department, designation, status..." />
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-success me-2">
+                    Search
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Reset
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <div class="alert alert-info">
+        Total Employees Found: <strong>@Model.TotalEmployees</strong>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee Code</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Joining Date</th>
+                <th>Basic Salary</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.Employees != null && Model.Employees.Any())
+            {
+                foreach (var item in Model.Employees)
+                {
+                    <tr>
+                        <td>@item.EmployeeCode</td>
+                        <td>@item.FullName</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                        <td>@item.Department?.DepartmentName</td>
+                        <td>@item.Designation?.DesignationName</td>
+                        <td>@item.JoiningDate.ToString("dd MMM yyyy")</td>
+                        <td>@item.BasicSalary.ToString("0.00")</td>
+                        <td>
+                            @if (item.EmploymentStatus == "Active")
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@item.EmploymentStatus</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-warning">
+                                Edit
+                            </a>
+
+                            <a asp-action="Details" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-info">
+                                Details
+                            </a>
+
+                            <a asp-action="Delete" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10" class="text-center text-muted">
+                        No employees found.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+
+                @if (Model.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-searchTerm="@Model.SearchTerm"
+                           asp-route-page="@(Model.CurrentPage - 1)">
+                            Previous
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                }
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.CurrentPage)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">@i</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-searchTerm="@Model.SearchTerm"
+                               asp-route-page="@i">
+                                @i
+                            </a>
+                        </li>
+                    }
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-searchTerm="@Model.SearchTerm"
+                           asp-route-page="@(Model.CurrentPage + 1)">
+                            Next
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                }
+
+            </ul>
+        </nav>
+    }
+</div>

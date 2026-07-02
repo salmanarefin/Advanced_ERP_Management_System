@@ -1,0 +1,70 @@
+﻿@model ERP_version1.Models.PayrollModule.Payroll
+
+@{
+    ViewData["Title"] = "Payslip";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Employee Payslip</h2>
+        <button onclick="window.print()" class="btn btn-primary">Print Payslip</button>
+    </div>
+
+    <div class="card">
+        <div class="card-header text-center">
+            <h3>ERP HRMS</h3>
+            <p>Salary Payslip</p>
+        </div>
+
+        <div class="card-body">
+            <h5>Employee Information</h5>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Employee Name:</strong> @Model.Employee?.FullName</p>
+                    <p><strong>Employee Code:</strong> @Model.Employee?.EmployeeCode</p>
+                    <p><strong>Email:</strong> @Model.Employee?.Email</p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>Department:</strong> @Model.Employee?.Department?.DepartmentName</p>
+                    <p><strong>Designation:</strong> @Model.Employee?.Designation?.DesignationName</p>
+                    <p><strong>Month:</strong> @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Month) @Model.Year</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Salary Information</h5>
+            <hr />
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Basic Salary</th>
+                    <td>@Model.BasicSalary.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <th>Bonus</th>
+                    <td>@Model.Bonus.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <th>Deduction</th>
+                    <td>@Model.Deduction.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <th>Tax</th>
+                    <td>@Model.Tax.ToString("0.00")</td>
+                </tr>
+                <tr class="table-success">
+                    <th>Net Salary</th>
+                    <td><strong>@Model.NetSalary.ToString("0.00")</strong></td>
+                </tr>
+            </table>
+
+            <p class="text-muted">
+                Generated At: @Model.GeneratedAt.ToString("dd MMM yyyy hh:mm tt")
+            </p>
+
+            <a asp-action="Index" class="btn btn-secondary">Back to Payroll List</a>
+        </div>
+    </div>
+</div>

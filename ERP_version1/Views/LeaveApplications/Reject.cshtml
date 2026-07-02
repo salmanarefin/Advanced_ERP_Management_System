@@ -1,0 +1,39 @@
+﻿@model ERP_version1.Models.LeaveModule.LeaveApplication
+
+@{
+    ViewData["Title"] = "Reject Leave";
+}
+
+<div class="container mt-4">
+    <h2>Reject Leave Application</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <p><strong>Employee:</strong> @Model.Employee?.FullName</p>
+            <p><strong>Leave Type:</strong> @Model.LeaveType?.LeaveTypeName</p>
+            <p><strong>Date:</strong> @Model.StartDate.ToString("dd MMM yyyy") - @Model.EndDate.ToString("dd MMM yyyy")</p>
+            <p><strong>Reason:</strong> @Model.Reason</p>
+
+            <form asp-action="RejectConfirmed" method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="id" value="@Model.LeaveApplicationId" />
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Rejection Reason</label>
+                    <textarea name="rejectionReason" class="form-control" rows="4"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Reject Application</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

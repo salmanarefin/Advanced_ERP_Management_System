@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ERP_version1.Models.PayrollModule.Payroll>
+
+@{
+    ViewData["Title"] = "Payroll List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Payroll List</h2>
+        <a asp-action="Create" class="btn btn-primary">Generate Payroll</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Basic Salary</th>
+                <th>Bonus</th>
+                <th>Deduction</th>
+                <th>Tax</th>
+                <th>Net Salary</th>
+                <th>Generated At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Employee?.FullName</td>
+                        <td>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.Month)</td>
+                        <td>@item.Year</td>
+                        <td>@item.BasicSalary.ToString("0.00")</td>
+                        <td>@item.Bonus.ToString("0.00")</td>
+                        <td>@item.Deduction.ToString("0.00")</td>
+                        <td>@item.Tax.ToString("0.00")</td>
+                        <td>
+                            <strong>@item.NetSalary.ToString("0.00")</strong>
+                        </td>
+                        <td>@item.GeneratedAt.ToString("dd MMM yyyy hh:mm tt")</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.PayrollId" class="btn btn-sm btn-info">
+                                Payslip
+                            </a>
+
+                            <a asp-action="Delete" asp-route-id="@item.PayrollId" class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10" class="text-center text-muted">
+                        No payroll records found.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

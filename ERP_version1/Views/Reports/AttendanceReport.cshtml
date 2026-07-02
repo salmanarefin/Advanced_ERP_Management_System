@@ -1,0 +1,281 @@
+﻿@model IEnumerable<ERP_version1.Models.AttendanceModule.Attendance>
+
+@{
+    ViewData["Title"] = "Attendance Report";
+}
+
+<div class="container-fluid mt-4 attendance-report-page">
+    <div class="d-flex justify-content-between align-items-center mb-3 no-print">
+        <div>
+            <h2>Attendance Report</h2>
+            <p class="text-muted mb-0">
+                Review employee attendance by date range, employee, status, or search keyword.
+            </p>
+        </div>
+
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary me-2">
+                Back to Reports
+            </a>
+
+            <button type="button" onclick="window.print()" class="btn btn-primary">
+                Print Report
+            </button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3 no-print">
+        <div class="card-body">
+            <form asp-action="AttendanceReport" method="get" class="row g-3 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label">From Date</label>
+                    <input type="date"
+                           name="fromDate"
+                           value="@ViewBag.FromDate"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">To Date</label>
+                    <input type="date"
+                           name="toDate"
+                           value="@ViewBag.ToDate"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Employee</label>
+                    <select name="employeeId" class="form-select" asp-items="ViewBag.Employees">
+                        <option value="">All Employees</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" asp-items="ViewBag.StatusList">
+                        <option value="">All Status</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Search</label>
+                    <input type="text"
+                           name="searchTerm"
+                           value="@ViewBag.SearchTerm"
+                           class="form-control"
+                           placeholder="Code, name, or email..." />
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">
+                        Apply Filter
+                    </button>
+                </div>
+
+                <div class="col-md-12">
+                    <a asp-action="AttendanceReport" class="btn btn-outline-secondary btn-sm">
+                        Clear Filter
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="print-header d-none d-print-block text-center mb-4">
+        <h2>ERP HRMS</h2>
+        <h4>Attendance Report</h4>
+        <p>
+            Period: @ViewBag.FromDate to @ViewBag.ToDate
+        </p>
+        <p>
+            Generated on @DateTime.Now.ToString("dd MMM yyyy hh:mm tt")
+        </p>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total Records</p>
+                    <h3 class="mb-0">@ViewBag.TotalRecords</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Present</p>
+                    <h3 class="mb-0">@ViewBag.PresentCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Absent</p>
+                    <h3 class="mb-0">@ViewBag.AbsentCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Late</p>
+                    <h3 class="mb-0">@ViewBag.LateCount</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between flex-wrap">
+                <div>
+                    <strong>Report Period:</strong>
+                    <span>@ViewBag.FromDate to @ViewBag.ToDate</span>
+                </div>
+
+                <div>
+                    <strong>Total Working Hours:</strong>
+                    <span>@ViewBag.TotalWorkingHours.ToString("N2") hours</span>
+                </div>
+
+                <div>
+                    <strong>Total Result:</strong>
+                    <span>@Model.Count()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>Attendance List</strong>
+            <span class="text-muted small">
+                Total Result: @Model.Count()
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover mb-0 align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date</th>
+                                <th>Employee Code</th>
+                                <th>Employee Name</th>
+                                <th>Email</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Working Hours</th>
+                                <th>Late Minutes</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.AttendanceDate.ToString("dd MMM yyyy")</td>
+                                    <td>@item.Employee?.EmployeeCode</td>
+                                    <td>@item.Employee?.FullName</td>
+                                    <td>@item.Employee?.Email</td>
+                                    <td>
+                                        @if (item.CheckInTime != null)
+                                        {
+                                            @item.CheckInTime.Value.ToString("hh:mm tt")
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.CheckOutTime != null)
+                                        {
+                                            @item.CheckOutTime.Value.ToString("hh:mm tt")
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td>@item.WorkingHours.ToString("N2")</td>
+                                    <td>@item.LateMinutes</td>
+                                    <td>
+                                        @if (item.Status == "Present")
+                                        {
+                                            <span class="badge bg-success">Present</span>
+                                        }
+                                        else if (item.Status == "Absent")
+                                        {
+                                            <span class="badge bg-danger">Absent</span>
+                                        }
+                                        else if (item.Status == "Late")
+                                        {
+                                            <span class="badge bg-warning text-dark">Late</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.Status</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    No attendance records found for this filter.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        body {
+            background: white !important;
+        }
+
+        .no-print,
+        .sidebar,
+        .navbar,
+        .btn {
+            display: none !important;
+        }
+
+        .container-fluid {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .card {
+            border: 1px solid #ddd !important;
+            box-shadow: none !important;
+        }
+
+        .table {
+            font-size: 11px;
+        }
+
+            .table th,
+            .table td {
+                padding: 5px !important;
+            }
+
+        .print-header {
+            display: block !important;
+        }
+    }
+</style>

@@ -1,0 +1,25 @@
+﻿@page
+
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="text-center">
+    <div class="mb-4">
+        <div style="font-size: 70px;">🔒</div>
+    </div>
+
+    <h2>Access Denied</h2>
+
+    <p class="subtitle">
+        You do not have permission to access this page.
+    </p>
+
+    <div class="alert alert-warning">
+        Your current role does not allow this action. Please contact the administrator if you believe this is a mistake.
+    </div>
+
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-auth w-100">
+        Back to Dashboard
+    </a>
+</div>

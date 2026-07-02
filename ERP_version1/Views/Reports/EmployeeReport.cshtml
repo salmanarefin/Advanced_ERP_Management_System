@@ -1,0 +1,206 @@
+﻿@model IEnumerable<ERP_version1.Models.HR.Employee>
+
+@{
+    ViewData["Title"] = "Employee Report";
+}
+
+<div class="container-fluid mt-4 employee-report-page">
+    <div class="d-flex justify-content-between align-items-center mb-3 no-print">
+        <div>
+            <h2>Employee Report</h2>
+            <p class="text-muted mb-0">
+                Filter and review employee information by department, status, or search keyword.
+            </p>
+        </div>
+
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary me-2">
+                Back to Reports
+            </a>
+
+            <button type="button" onclick="window.print()" class="btn btn-primary">
+                Print Report
+            </button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3 no-print">
+        <div class="card-body">
+            <form asp-action="EmployeeReport" method="get" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Department</label>
+                    <select name="departmentId" class="form-select" asp-items="ViewBag.Departments">
+                        <option value="">All Departments</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" asp-items="ViewBag.StatusList">
+                        <option value="">All Status</option>
+                    </select>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="form-label">Search</label>
+                    <input type="text"
+                           name="searchTerm"
+                           value="@ViewBag.SearchTerm"
+                           class="form-control"
+                           placeholder="Search by code, name, email, phone, department, designation..." />
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">
+                        Apply Filter
+                    </button>
+                </div>
+
+                <div class="col-md-12">
+                    <a asp-action="EmployeeReport" class="btn btn-outline-secondary btn-sm">
+                        Clear Filter
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="print-header d-none d-print-block text-center mb-4">
+        <h2>ERP HRMS</h2>
+        <h4>Employee Report</h4>
+        <p>
+            Generated on @DateTime.Now.ToString("dd MMM yyyy hh:mm tt")
+        </p>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total Employees</p>
+                    <h3 class="mb-0">@ViewBag.TotalEmployees</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Active Employees</p>
+                    <h3 class="mb-0">@ViewBag.ActiveEmployees</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-2">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Inactive / Others</p>
+                    <h3 class="mb-0">@ViewBag.InactiveEmployees</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>Employee List</strong>
+            <span class="text-muted small">
+                Total Result: @Model.Count()
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover mb-0 align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Code</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Joining Date</th>
+                                <th>Basic Salary</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.EmployeeCode</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.Department?.DepartmentName</td>
+                                    <td>@item.Designation?.DesignationName</td>
+                                    <td>@item.JoiningDate.ToString("dd MMM yyyy")</td>
+                                    <td>@item.BasicSalary.ToString("N2")</td>
+                                    <td>
+                                        @if (item.EmploymentStatus == "Active")
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.EmploymentStatus</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center text-muted">
+                    No employees found for this filter.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        body {
+            background: white !important;
+        }
+
+        .no-print,
+        .sidebar,
+        .navbar,
+        .btn {
+            display: none !important;
+        }
+
+        .container-fluid {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .card {
+            border: 1px solid #ddd !important;
+            box-shadow: none !important;
+        }
+
+        .table {
+            font-size: 12px;
+        }
+
+            .table th,
+            .table td {
+                padding: 6px !important;
+            }
+
+        .print-header {
+            display: block !important;
+        }
+    }
+</style>

@@ -1,0 +1,53 @@
+﻿@page
+@model ERP_version1.Areas.Identity.Pages.Account.RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Create Account</h2>
+<p class="subtitle">
+    Create a new ERP HRMS user account.
+</p>
+
+<form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Email" class="form-label"></label>
+        <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="Enter email address" />
+        <span asp-validation-for="Input.Email" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Password" class="form-label"></label>
+        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" placeholder="Create password" />
+        <span asp-validation-for="Input.Password" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-4">
+        <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" placeholder="Confirm password" />
+        <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-auth w-100">
+        Register
+    </button>
+
+    <div class="text-center mt-4">
+        <span class="text-muted">Already have an account?</span>
+        <a class="auth-link" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">
+            Login
+        </a>
+    </div>
+
+    <div class="alert alert-warning mt-4 mb-0">
+        Newly registered users will be assigned the <strong>Employee</strong> role by default.
+        Admin can change roles later from User Role Management.
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

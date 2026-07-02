@@ -1,0 +1,70 @@
+﻿@model ERP_version1.Models.HR.Designation
+
+@{
+    ViewData["Title"] = "Edit Designation";
+}
+
+<div class="container-fluid mt-4">
+    <div class="mb-4">
+        <h2 class="mb-1">Edit Designation</h2>
+        <p class="text-muted mb-0">
+            Update designation name, department, and active status.
+        </p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white">
+            <strong>Designation Information</strong>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <input type="hidden" asp-for="DesignationId" />
+                <input type="hidden" asp-for="CreatedAt" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DesignationName" class="form-label">Designation Name</label>
+                        <input asp-for="DesignationName" class="form-control" />
+                        <span asp-validation-for="DesignationName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DepartmentId" class="form-label">Department</label>
+                        <select asp-for="DepartmentId"
+                                class="form-select"
+                                asp-items="ViewBag.DepartmentId">
+                            <option value="">Select Department</option>
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="IsActive" class="form-label">Status</label>
+                        <select asp-for="IsActive" class="form-select">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                        <span asp-validation-for="IsActive" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Back to List
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Update Designation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
